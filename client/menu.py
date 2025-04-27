@@ -40,7 +40,7 @@ if __name__ == '__main__':
                 title = input('Search (book title):')
                 search_result = client.search(title)
                 table = Table(title=f'Showing results for "{title}"')
-                # styling doesn't show in PyCharm terminal!
+                # styling doesn't show in PyCharm terminal, but for example Windows PowerShell works
                 table.add_column("S. No.", style="cyan", no_wrap=True)
                 table.add_column("Title", style="magenta")
                 table.add_column("Price", justify="right", style="red")
