@@ -6,11 +6,12 @@ from rich.table import Table
 def main_menu():
     print('''1. Search
 2. List all books
+3. Go to checkout
 0.Exit''')
     return int(input('Your choice:'))
 
 
-def buy_menu(books, client):
+def add_to_cart(books, cart):
     try:
         book_no = int(input('Enter the Serial Number of the book you want to purchase (Back = 0):'))
         if book_no > len(books):
@@ -18,7 +19,8 @@ def buy_menu(books, client):
         elif book_no == 0:
             main_menu()
         else:
-            client.buy(books[i - 1])
+            print("Book added to your shopping cart!")
+            cart.append(books[book_no - 1])
     except ValueError:
         print('Invalid choice')
 
@@ -27,6 +29,7 @@ if __name__ == '__main__':
     print("Book Store")
     client = Client()
     console = Console()
+    cart = []
     while True:
         try:
             choice = main_menu()
@@ -49,10 +52,23 @@ if __name__ == '__main__':
                                   str(search_result[i]['amount']))
 
                 console.print(table)
-                buy_menu(search_result, client)
+                add_to_cart(search_result, cart)
             elif choice == 2:
                 print('Available books:')
                 all_books = client.search('')
+            elif choice == 3:
+                table = Table(title='Your cart')
+                table.add_column("S. No.", style="cyan", no_wrap=True)
+                table.add_column("Title", style="magenta")
+                table.add_column("Price", justify="right", style="red")
+                total = 0
+                for i in range(len(cart)):
+                    table.add_row(str(i + 1),
+                                  cart[i]['title'],
+                                  str(cart[i]['price']))
+                    total += cart[i]['price']
+                console.print(table)
+                print(f'Total: {total} Euros')
 
         except ValueError:
             print('Invalid choice')

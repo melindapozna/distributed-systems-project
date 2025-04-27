@@ -7,7 +7,7 @@ class Client:
 
     # searches books by substring in their title
     def search(self, book_title):
-        self.server.search()
+        #self.server.search()
         # todo parse xml
         # populate books with real data
         books = [
@@ -15,6 +15,11 @@ class Client:
                 'title': 'Example book',
                 'price': 10,
                 'amount': 2
+            },
+            {
+                'title': 'Another book',
+                'price': 40,
+                'amount': 3
             }
         ]
 
@@ -25,4 +30,4 @@ class Client:
 
     def buy(self, book):
         xml_book = ""
-        self.server.buy(xml_book)
+        #self.server.buy(xml_book)
