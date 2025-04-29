@@ -1,4 +1,3 @@
-from bson import ObjectId
 from flask import Flask, request, jsonify
 
 from vendor_server.database import Database
@@ -10,13 +9,6 @@ db_address = '127.0.0.1'
 db_port = 27017
 db_name = "Products"
 db = Database(db_address, db_port, db_name)
-
-# Switch to False for initial setup
-inserted = True
-if not inserted:
-    books = [('Silly Book', 10, 100), ('Medium Book', 30, 1), ('Smart Book', 50, 0)]
-    db.insert('Books',
-              [{'name': n, 'price': p, 'quantity': q} for n, p, q in books])
 
 app = Flask(__name__)
 
@@ -43,4 +35,5 @@ def buy():
     price = db.remove_one('Books', id)
     return jsonify(price)
 
-app.run(host=server_address, port=server_port)
+if __name__ == '__main__':
+    app.run(host=server_address, port=server_port)

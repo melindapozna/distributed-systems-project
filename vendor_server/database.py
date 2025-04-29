@@ -31,3 +31,6 @@ class Database:
         price = self.db[collection_name].find_one(filter)['price']
         update_result = self.db[collection_name].update_one(filter, update)
         return update_result.matched_count * price
+
+    def drop_collection(self, collection_name: str):
+        self.db[collection_name].drop()
