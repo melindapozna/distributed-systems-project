@@ -28,6 +28,6 @@ class Client:
 
         return list(filter(books_exist, books))
 
-    def buy(self, book):
+    def buy(self, books):
         xml_book = ""
-        #self.server.buy(xml_book)
+        self.server.buy(xml_book)

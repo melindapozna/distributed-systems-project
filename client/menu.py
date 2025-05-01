@@ -7,7 +7,7 @@ def main_menu():
     print('''1. Search
 2. List all books
 3. Go to checkout
-0.Exit''')
+0. Exit''')
     return int(input('Your choice:'))
 
 
@@ -21,6 +21,20 @@ def add_to_cart(books, cart):
         else:
             print("Book added to your shopping cart!")
             cart.append(books[book_no - 1])
+    except ValueError:
+        print('Invalid choice')
+
+
+def remove_from_cart(cart):
+    try:
+        book_no = int(input('Enter the Serial Number of the book you want to remove (Back = 0):'))
+        if book_no > len(cart):
+            raise ValueError
+        elif book_no == 0:
+            main_menu()
+        else:
+            print("Book removed from cart!")
+            cart.pop(book_no - 1)
     except ValueError:
         print('Invalid choice')
 
@@ -52,7 +66,10 @@ if __name__ == '__main__':
                                   str(search_result[i]['amount']))
 
                 console.print(table)
-                add_to_cart(search_result, cart)
+                try:
+                    add_to_cart(search_result, cart)
+                except ValueError:
+                    continue
             elif choice == 2:
                 print('Available books:')
                 all_books = client.search('')
@@ -70,6 +87,17 @@ if __name__ == '__main__':
                 console.print(table)
                 print(f'Total: {total} Euros')
 
+                is_purchase = input("Do you want to purchase these books? (y/n):")
+                if is_purchase.lower() == "y":
+                    client.buy(cart)
+                elif is_purchase.lower() == "n":
+                    try:
+                        remove_from_cart(cart)
+                    except ValueError:
+                        continue
+                else:
+                    raise ValueError
+
         except ValueError:
             print('Invalid choice')
-            main_menu()
+            continue
