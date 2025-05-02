@@ -1,4 +1,5 @@
 import xmlrpc.client
+import xml.etree.ElementTree as ET
 
 
 class Client:
@@ -29,5 +30,14 @@ class Client:
         return list(filter(books_exist, books))
 
     def buy(self, books):
-        xml_book = ""
-        self.server.buy(xml_book)
+        root = ET.Element("root")
+        for book in books:
+            print(book)
+            xml_book = ET.SubElement(root, 'book')
+            ET.SubElement(xml_book, 'title').text = book['title']
+            # todo: do we want individual or total price?
+            ET.SubElement(xml_book, 'price').text = book['individual_price']
+            ET.SubElement(xml_book, 'amount').text = book['amount']
+        tree = ET.ElementTree(root)
+
+        #self.server.buy(tree)
