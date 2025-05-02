@@ -33,18 +33,17 @@ def search():
 @app.route('/buy', methods=['POST'])
 def buy():
     body = request.get_json()
-    if 'id' not in body:
-        return jsonify({'error': 'No id in request body'}), 400
-    id = body['id']
-    try:
-        price = db.remove_one('Books', id)
-        if price is None:
-            return jsonify({'error': 'Not enough items in stock'}), 400 # TODO change status code
-        return jsonify(price)
-    except KeyError as _:
-        return jsonify({'error': f'Object with this id does not exist'}), 404
-    except Exception as e:
-        return jsonify({'error': f'Error during buying: {e}'}), 500
+    if type(body) is not list:
+        return jsonify({'error': 'Malformed request body'}), 400
+
+    result = db.remove_multiple_items('Books', body)
+    if result is None:
+        return jsonify({'error': 'Malformed request body'}), 400
+
+    price, item_count = result
+    if item_count < len(body):
+        return jsonify({'error': 'Not enough items in stock'}), 409 # TODO change status code?
+    return jsonify({'result': price}), 200
 
 if __name__ == '__main__':
     app.run(host=server_address, port=server_port)
