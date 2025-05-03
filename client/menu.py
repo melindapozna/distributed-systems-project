@@ -19,7 +19,6 @@ def pretty_print_search_result(search_result, title):
     table.add_column("Price", justify="right", style="red")
     table.add_column("Available amount", justify="right", style="green")
     for i in range(len(search_result)):
-        print(search_result[i])
         table.add_row(str(i + 1),
                       search_result[i]['name'],
                       str(search_result[i]['price']),

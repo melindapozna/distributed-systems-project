@@ -24,7 +24,7 @@ class Client:
 
             books_raw_notype = self.server.search(book_title)
             books_raw = cast(list, books_raw_notype)
-            print(f"Client: Received {len(books_raw)} raw results from server.")
+            print(f"Client: Received {len(books_raw)} results from server.")
 
             def books_exist(book):
                     # using get defaults to 0 if dict is malformed
