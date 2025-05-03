@@ -1,6 +1,6 @@
 from collections.abc import Iterable
 
-from bson import ObjectId
+from bson.objectid import ObjectId
 from pymongo import MongoClient
 from re import escape, compile, IGNORECASE
 
@@ -8,6 +8,8 @@ from re import escape, compile, IGNORECASE
 class Database:
     def __init__(self, host: str, port: int, name: str):
         self.client = MongoClient(f'mongodb://{host}:{port}')
+        #self.client = MongoClient(f'mongodb://{user}:{password}@{host}:27017/{name}?authSource=admin')
+        #^^db particularities on my end, ignore this
         self.db = self.client[name]
 
     def insert(self, collection_name: str, data: list[dict]):
@@ -33,7 +35,7 @@ class Database:
     def remove_one(self, collection_name: str, id: str) -> int | None:
         filter = {'_id': ObjectId(id), 'quantity': {'$gt': 0}}
         update = {'$inc': {'quantity': -1}}
-        item = self.db[collection_name].find_one({'id': ObjectId(id)})
+        item = self.db[collection_name].find_one({'_id': ObjectId(id)})
         if not item:
             raise KeyError(f'No item found with id {id}')
         price = item['price']

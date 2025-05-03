@@ -1,6 +1,6 @@
 # This file deletes the database contents and fills it with example values
 
-from vendor_server.server import db
+from server import db
 
 
 db.drop_collection('Books')

@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 
-from vendor_server.database import Database
+from database import Database
 
 server_address = '127.0.0.1'
 server_port = 1642
@@ -16,6 +16,8 @@ app = Flask(__name__)
 @app.route('/search', methods=['GET'])
 def search():
     query = request.args.get('query')
+    if not query:
+        raise ValueError('No query provided')
     try:
         search_results = db.search('Books', query, ['name'])
         return jsonify(
@@ -33,6 +35,7 @@ def search():
 @app.route('/buy', methods=['POST'])
 def buy():
     body = request.get_json()
+    print(body)
     if 'id' not in body:
         return jsonify({'error': 'No id in request body'}), 400
     id = body['id']
