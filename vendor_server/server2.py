@@ -7,10 +7,10 @@ from vendor_server.register_server import register_server
 
 
 server_address = '127.0.0.1'
-server_port = 1642
+server_port = 1643
 
 # Registering the vendor server with the hub upon first launch
-load_dotenv(dotenv_path='.env.vendor1')
+load_dotenv(dotenv_path='.env.vendor2')
 if not getenv('SERVER_REGISTERED'):
     result = register_server(server_address, server_port)
     if not result:
@@ -22,7 +22,7 @@ if not getenv('SERVER_REGISTERED'):
 # Database setup
 db_address = '127.0.0.1'
 db_port = 27017
-db_name = "Products"
+db_name = "Products2"
 db = Database(db_address, db_port, db_name, allow_transactions=False)
 
 

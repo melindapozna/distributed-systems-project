@@ -1,15 +1,13 @@
 import xmlrpc.server
 from socketserver import ThreadingMixIn
-
+from flask import Flask, request
 import requests
-
 from collections import defaultdict
-from vendor_handling_server import VENDOR_SERVERS, start_vendor_handling_server
 import threading
 
 MAIN_SERVER_HOST = 'localhost'
 MAIN_SERVER_PORT = 3000
-
+VENDOR_SERVERS = []
 
 class SimpleThreadedXMLRPCServer(ThreadingMixIn, xmlrpc.server.SimpleXMLRPCServer):
     pass
@@ -153,6 +151,28 @@ def run():
         exit(0)
     except Exception as e:
         print(f"An unexpected error occurred during server operation: {e}")
+
+#
+# Vendor server handling server
+#
+app = Flask(__name__)
+server_address = '127.0.0.1'
+server_port = 3001
+
+
+@app.route('/register', methods=['POST'])
+def register():
+    address = request.get_json()
+    if type(address) != str:
+        return "Incorrect body, send address only", 400
+    VENDOR_SERVERS.append(address)
+    print(VENDOR_SERVERS)
+    return "Connected successfully", 200
+
+
+def start_vendor_handling_server():
+    while True:
+        app.run(host=server_address, port=server_port)
 
 
 if __name__ == '__main__':
