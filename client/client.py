@@ -49,15 +49,13 @@ class Client:
             print(f"Client: Sending {len(cart_items)} item types from cart to server for purchase...")
             try:
                 purchase_results_notype = self.server.buy(cart_items)
-                purchase_results = cast(list, purchase_results_notype)
+                purchase_results = cast(dict, purchase_results_notype)
                 print("Client: Purchase attempt results received from server:")
-                for result in purchase_results:
-                    title = result.get('title', 'Unknown Item')
-                    req = result.get('requested_amount', 0)
-                    bought = result.get('successful_amount', 0)
-                    price_paid = result.get('total_price_paid', 0)
-                    message = result.get('message', 'No status message.')
-                    print(f"  - '{title}': {bought} / {req} purchased. Total paid: {price_paid:.2f} Euros. Status: {message}")
+                for item in purchase_results['items']:
+                    title = item.get('name', 'Unknown Item')
+                    quantity = item.get('quantity', 0)
+                    print(f"  - '{title}' x{quantity}: purchased.")
+                print(f'Total price paid: {purchase_results["price"]} euros')
                 return purchase_results
 
             except xmlrpc.client.Fault as err:
