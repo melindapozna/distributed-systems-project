@@ -1,7 +1,8 @@
 import xmlrpc.server
 import requests
 from collections import defaultdict
-from vendor_handling_server import VENDOR_SERVERS #, start_vendor_handling_server
+from vendor_handling_server import VENDOR_SERVERS, start_vendor_handling_server
+import threading
 
 MAIN_SERVER_HOST = 'localhost'
 MAIN_SERVER_PORT = 3000
@@ -127,7 +128,8 @@ class MainServer:
         # xml-rpc does the conversion itself
         return {'price': total_price_paid, 'items': purchased_items}
 
-if __name__ == '__main__':
+
+def run():
     server = xmlrpc.server.SimpleXMLRPCServer(
         (MAIN_SERVER_HOST, MAIN_SERVER_PORT),
         allow_none=True  # allows functions to return None if needed
@@ -143,5 +145,14 @@ if __name__ == '__main__':
         server.serve_forever()
     except KeyboardInterrupt:
         print("Main server shutting down.")
+        exit(0)
     except Exception as e:
         print(f"An unexpected error occurred during server operation: {e}")
+
+
+if __name__ == '__main__':
+    main_server_thread = threading.Thread(target=run)
+    vendor_handler_thread = threading.Thread(target=start_vendor_handling_server)
+
+    main_server_thread.start()
+    vendor_handler_thread.start()
