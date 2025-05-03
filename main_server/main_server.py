@@ -1,5 +1,8 @@
 import xmlrpc.server
+from socketserver import ThreadingMixIn
+
 import requests
+
 from collections import defaultdict
 from vendor_handling_server import VENDOR_SERVERS, start_vendor_handling_server
 import threading
@@ -8,6 +11,8 @@ MAIN_SERVER_HOST = 'localhost'
 MAIN_SERVER_PORT = 3000
 
 
+class SimpleThreadedXMLRPCServer(ThreadingMixIn, xmlrpc.server.SimpleXMLRPCServer):
+    pass
 
 class MainServer:
 

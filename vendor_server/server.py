@@ -32,8 +32,6 @@ app = Flask(__name__)
 @app.route('/search', methods=['GET'])
 def search():
     query = request.args.get('query')
-    if not query:
-        raise ValueError('No query provided')
     try:
         search_results = db.search('Books', query, ['name'])
         return jsonify(
