@@ -8,7 +8,7 @@ server_port = 1642
 db_address = '127.0.0.1'
 db_port = 27017
 db_name = "Products"
-db = Database(db_address, db_port, db_name)
+db = Database(db_address, db_port, db_name, allow_transactions=False)
 
 app = Flask(__name__)
 
@@ -36,14 +36,14 @@ def buy():
     if type(body) is not list:
         return jsonify({'error': 'Malformed request body'}), 400
 
-    result = db.remove_multiple_items('Books', body)
+    result = db.remove_items('Books', body)
     if result is None:
         return jsonify({'error': 'Malformed request body'}), 400
 
-    price, item_count = result
-    if item_count < len(body):
+    price, updated_items = result
+    if price == -1:
         return jsonify({'error': 'Not enough items in stock'}), 409 # TODO change status code?
-    return jsonify({'result': price}), 200
+    return jsonify({'price': price, 'items': updated_items}), 200
 
 if __name__ == '__main__':
     app.run(host=server_address, port=server_port)
