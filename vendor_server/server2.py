@@ -5,6 +5,12 @@ from os import getenv
 from vendor_server.database import Database
 from vendor_server.register_server import register_server
 
+# some IDEs may not treat folders as local modules by default, therefore the above 2 imports won't work
+# In that case, comment out the previous 2 imports and uncomment the following 2 lines of code:
+
+# from database import Database
+# from register_server import register_server
+
 
 server_address = '127.0.0.1'
 server_port = 1643
