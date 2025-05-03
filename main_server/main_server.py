@@ -1,13 +1,11 @@
 import xmlrpc.server
 import requests
 from collections import defaultdict
+from vendor_handling_server import VENDOR_SERVERS #, start_vendor_handling_server
 
 MAIN_SERVER_HOST = 'localhost'
 MAIN_SERVER_PORT = 3000
 
-VENDOR_SERVERS = [
-    'http://localhost:1642'  # Yes the server list is still hardcoded, sorry will change very soon
-]
 
 
 class MainServer:
@@ -15,9 +13,10 @@ class MainServer:
     def search(self, query: str):
         all_results = []
         print(f"Received search request from client for query: '{query}'")
-
+        print(VENDOR_SERVERS)
         for vendor_url in VENDOR_SERVERS:
             search_url = f"{vendor_url}/search"
+            print(vendor_url)
             try:
                 response = requests.get(search_url, params={'query': query})
                 response.raise_for_status()

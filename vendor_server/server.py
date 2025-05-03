@@ -16,6 +16,7 @@ if not getenv('SERVER_REGISTERED'):
     if not result:
         print('Failed to register the vendor server')
         exit(0)
+    print('Successfully registered the vendor server')
     set_key('.env', 'SERVER_REGISTERED', '1')
 
 # Database setup
