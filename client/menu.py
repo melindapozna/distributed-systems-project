@@ -126,6 +126,7 @@ if __name__ == '__main__':
                 is_purchase = input("Do you want to purchase these books? (y/n):")
                 if is_purchase.lower() == "y":
                     client.buy(cart)
+                    cart.clear()
                 elif is_purchase.lower() == "n":
                     try:
                         remove_from_cart(cart)
