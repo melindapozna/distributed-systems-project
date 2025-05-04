@@ -2,26 +2,28 @@ from flask import Flask, request, jsonify
 from dotenv import load_dotenv, set_key
 from os import getenv
 
+
 from database import Database
 from register_server import register_server
 
+
 server_address = '127.0.0.1'
-server_port = 1642
+server_port = 1643
 
 # Registering the vendor server with the hub upon first launch
-load_dotenv(dotenv_path='.env1')
+load_dotenv(dotenv_path='.env2')
 if not getenv('SERVER_REGISTERED'):
     result = register_server(server_address, server_port)
     if not result:
         print('Failed to register the vendor server')
         exit(0)
     print('Successfully registered the vendor server')
-    set_key('.env1', 'SERVER_REGISTERED', '1')
+    set_key('.env2', 'SERVER_REGISTERED', '1')
 
 # Database setup
 db_address = '127.0.0.1'
 db_port = 27017
-db_name = "Products"
+db_name = "Products2"
 db = Database(db_address, db_port, db_name, allow_transactions=False)
 
 
